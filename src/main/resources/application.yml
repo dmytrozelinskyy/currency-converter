@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: currency-converter
+
+  datasource:
+    url: jdbc:h2:mem:currencydb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: pass
+
+  h2:
+    console:
+      enabled: true
+      path: /cc-console
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  security:
+    user:
+      name: admin
+      password: admin123
+
+logging:
+  level:
+    org.springframework: INFO
+    org.hibernate.SQL: DEBUG
+
+exchange:
+  api:
+    base-url: https://v6.exchangerate-api.com/v6
+    key: ${EXCHANGE_API_KEY}
+    timeout: 6000
+
+app:
+  security:
+    api-key-header: X-API-KEY
+    api-key-length: 32
