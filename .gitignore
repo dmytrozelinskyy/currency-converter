@@ -1,0 +1,56 @@
+# Build Output (Gradle) #
+.gradle/
+build/
+out/
+
+# Compiled Files #
+*.class
+
+# Logs #
+*.log
+logs/
+
+# OS Files #
+.DS_Store
+Thumbs.db
+
+# IntelliJ IDEA #
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse / STS #
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# VS Code #
+.vscode/
+
+# NetBeans #
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+
+# Temporary Files #
+*.tmp
+*.swp
+*.bak
+*~
+
+# Error Logs #
+hs_err_pid*
+replay_pid*
+
+# Local Environment Files #
+local.properties
+.env
+.env.*
+
+HELP.md
