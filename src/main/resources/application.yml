@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: currency-converter
+  web:
+    resources:
+      cache:
+        period: 0
+      chain:
+        cache: false
 
   datasource:
     url: jdbc:h2:mem:currencydb
