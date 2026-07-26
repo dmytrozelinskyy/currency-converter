@@ -12,7 +12,7 @@ public class ExchangeRateClient {
 
     private final RestClient restClient;
 
-    public ExchangeRateClient(@Value("${exchange.api.base-url }") String baseUrl) {
+    public ExchangeRateClient(@Value("${exchange.api.base-url}") String baseUrl) {
         this.restClient = RestClient.builder().baseUrl(baseUrl).build();
     }
 
