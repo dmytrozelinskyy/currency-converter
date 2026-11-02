@@ -4,23 +4,27 @@
     box-sizing: border-box;
 }
 
-html,
+:root {
+    --accent: #1a8f6a;
+    --accent-dark: #146d51;
+    --text: #16211d;
+    --muted: #5d6b66;
+    --border: #d8e0dc;
+    --surface: #ffffff;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    width: 100%;
-    height: 100%;
+    min-height: 100%;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--text);
+    background: #f4f7f5;
 }
 
-.hero {
-    position: relative;
-    height: 100vh;
-}
-
-.hero-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
+/* -- Header -- */
 .site-header {
     position: fixed;
     top: 0;
@@ -29,8 +33,27 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1.5rem;
     padding: 1rem 2rem;
     z-index: 10;
+    color: #fff;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent);
+    transition: background 0.3s ease;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.brand-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
 }
 
 .tabs,
@@ -44,6 +67,173 @@ body {
     justify-content: flex-end;
 }
 
-.logo {
-    flex-shrink: 0;
+.tabs ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+}
+
+.tabs a {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+}
+
+.tabs a:hover,
+.tabs a:focus-visible {
+    border-bottom-color: currentColor;
+}
+
+.contact-btn {
+    padding: 0.5rem 1.1rem;
+    font: inherit;
+    font-weight: 600;
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.contact-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #fff;
+}
+
+/* -- Hero -- */
+.hero {
+    position: relative;
+    height: 100vh;
+}
+
+.hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1.5rem;
+    text-align: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.hero-content h1 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    line-height: 1.1;
+}
+
+.hero-tagline {
+    max-width: 34ch;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* -- Converter -- */
+.converter {
+    max-width: 60rem;
+    margin: -4rem auto 4rem;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-radius: 1rem;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.convert-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1 1 8rem;
+}
+
+.field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.field input {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    font: inherit;
+    color: inherit;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+}
+
+.field input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+}
+
+#from,
+#to {
+    text-transform: uppercase;
+}
+
+.convert-btn {
+    padding: 0.75rem 1.75rem;
+    font: inherit;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.convert-btn:hover {
+    background: var(--accent-dark);
+}
+
+.result {
+    min-height: 1.5rem;
+    margin-top: 1.25rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* -- Responsive -- */
+@media (max-width: 700px) {
+    .site-header {
+        padding: 1.2rem 1.5rem;
+        gap: 1rem;
+    }
+
+    .tabs {
+        display: none;
+    }
+
+    .converter {
+        margin: -3rem 1rem 3rem;
+        padding: 1.5rem;
+    }
+
+    .convert-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }

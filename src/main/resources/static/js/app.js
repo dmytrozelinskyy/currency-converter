@@ -1,15 +1,18 @@
-document.getElementById('convert-from'),addEventListener('submit', async (e) => {
+const form = document.getElementById('convert-form');
+const result = document.getElementById('result');
+
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const amount = document.getElementById('amount').value;
     const from = document.getElementById('from').value.toUpperCase();
     const to = document.getElementById('to').value.toUpperCase();
-    const result = document.getElementById('result');
 
-    result.textContent = "Converting in progress...";
+    result.textContent = 'Converting in progress...';
 
     try {
-        const response = await fetch(`/api/convert?from=${from}&to=${to}&amount=${amount}`);
+        const params = new URLSearchParams({from, to, amount});
+        const response = await fetch(`/api/convert?${params}`);
 
         if (!response.ok)
             throw new Error(`Request failed: ${response.status}`);
@@ -19,4 +22,4 @@ document.getElementById('convert-from'),addEventListener('submit', async (e) => 
     } catch (err) {
         result.textContent = `Error: ${err.message}`;
     }
-});x
+});
