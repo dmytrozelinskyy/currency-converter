@@ -17,7 +17,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/cc-console/**").permitAll()
-                                .requestMatchers("/", "/index.html", "/css/**", "/js/**").permitAll()
+                                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**").permitAll()
                                 .requestMatchers("/api/**").permitAll()
                                 .anyRequest().authenticated()
                 ).httpBasic(basic -> {});
