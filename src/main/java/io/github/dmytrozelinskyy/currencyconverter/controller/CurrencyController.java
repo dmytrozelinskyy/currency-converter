@@ -1,6 +1,8 @@
 package io.github.dmytrozelinskyy.currencyconverter.controller;
 
 import io.github.dmytrozelinskyy.currencyconverter.service.CurrencyConversionService;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +20,15 @@ public class CurrencyController {
 
     @GetMapping("/api/convert")
     public BigDecimal convert(
-            @RequestParam String from,
-            @RequestParam String to,
-            @RequestParam BigDecimal amount
+            @RequestParam
+            @Pattern(regexp = "[A-Za-z]{3}", message = "must be a 3-letter currency code, e.g. USD")
+            String from,
+            @RequestParam
+            @Pattern(regexp = "[A-Za-z]{3}", message = "must be a 3-letter currency code, e.g. EUR")
+            String to,
+            @RequestParam
+            @DecimalMin(value = "0", inclusive = false, message = "must be greater than 0")
+            BigDecimal amount
     )
     {
         return conversionService.convert(from, to, amount);
