@@ -13,9 +13,11 @@ import java.util.Locale;
 @Service
 public class CurrencyConversionService {
     private final ExchangeRateClient exchangeRateClient;
+    private final ConversionHistoryService conversionHistoryService;
 
-    public CurrencyConversionService(ExchangeRateClient exchangeRateClient) {
+    public CurrencyConversionService(ExchangeRateClient exchangeRateClient, ConversionHistoryService conversionHistoryService) {
         this.exchangeRateClient = exchangeRateClient;
+        this.conversionHistoryService = conversionHistoryService;
     }
 
     public BigDecimal convert(String from, String to, BigDecimal amount) {
@@ -35,6 +37,7 @@ public class CurrencyConversionService {
         if (converted == null)
             throw new CurrencyNotSupportedException("No rate was found for currency: " + target);
 
+        conversionHistoryService.record(source, target, amount, converted);
         return converted;
     }
 }
