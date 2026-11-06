@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: currency-converter
+
   web:
     resources:
       cache:
@@ -12,36 +13,30 @@ spring:
         cache: false
 
   datasource:
-    url: jdbc:h2:mem:currencydb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: pass
-
-  h2:
-    console:
-      enabled: true
-      path: /cc-console
-      settings:
-        web-allow-others: false
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/currency}
+    username: ${DB_USER:currency}
+    password: ${DB_PASSWORD:dev-password}
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+
+  data:
+    web:
+      pageable:
+        max-page-size: 100
 
   security:
     user:
-      name: admin
-      password: admin123
+      name: ${ADMIN_USER:admin}
+      password: ${ADMIN_PASSWORD:admin123}
 
 logging:
   level:
     org.springframework: INFO
-    org.hibernate.SQL: DEBUG
 
 exchange:
   api:
