@@ -17,7 +17,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/cc-console/**").permitAll()
-                                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**").permitAll()
+                                .requestMatchers("/", "/index.html", "/currencies.html", "/css/**", "/js/**", "/images/**").permitAll()
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated()
