@@ -15,15 +15,17 @@ import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Map;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
 public class ExchangeRateClientTest {
    private static final String URL = "https://api.test/v1/latest?amount=100&from=USD&to=EUR";
+   private static final String CURRENCIES_URL = "https://api.test/v1/currencies";
 
    private MockRestServiceServer mockServer;
    private ExchangeRateClient exchangeRateClient;
@@ -85,5 +87,49 @@ public class ExchangeRateClientTest {
       assertThatThrownBy(() -> exchangeRateClient.getConversion("USD", "EUR", new BigDecimal("100")))
               .isInstanceOf(ExchangeRateUnavailableException.class)
               .hasCauseInstanceOf(ResourceAccessException.class);
+   }
+
+   // -- Currencies Tests -- //
+   @Test
+   void getCurrencies_parsesCodeToNameMap() {
+      mockServer.expect(requestTo(CURRENCIES_URL))
+              .andExpect(method(HttpMethod.GET))
+              .andRespond(withSuccess("""
+                      {"AUD":"Australian Dollar","EUR": "Euro"}""", MediaType.APPLICATION_JSON));
+
+      Map<String, String> result = exchangeRateClient.getCurrencies();
+
+      assertThat(result)
+              .hasSize(2)
+              .containsEntry("EUR", "Euro");
+      mockServer.verify();
+   }
+
+   @Test
+   void getCurrencies_serverError_throwsRateUnavailable() {
+      mockServer.expect(requestTo(CURRENCIES_URL))
+              .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+
+      assertThatThrownBy(() -> exchangeRateClient.getCurrencies())
+              .isInstanceOf(ExchangeRateUnavailableException.class);
+   }
+
+   @Test
+   void getCurrencies_emptyObject_throwsRateUnavailable() {
+      mockServer.expect(requestTo(CURRENCIES_URL))
+              .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON));
+
+      assertThatThrownBy(() -> exchangeRateClient.getCurrencies())
+              .isInstanceOf(ExchangeRateUnavailableException.class);
+   }
+
+   @Test
+   void getCurrencies_networkFailure_throwsRateUnavailable() {
+      mockServer.expect(requestTo(CURRENCIES_URL))
+              .andRespond(withException(new IOException("connection refused")));
+
+      assertThatThrownBy(() -> exchangeRateClient.getCurrencies())
+              .isInstanceOf(ExchangeRateUnavailableException.class)
+              .hasRootCauseInstanceOf(IOException.class);
    }
 }
