@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Currency Converter</title>
+</head>
+<body>
+<main class="currencies-page">
+  <h1>Available currencies</h1>
+  <p class="muted">
+    Currencies you can convert, from the Frankfurter exchange rate data.
+  </p>
+
+  <input type="search" id="filter" placeholder="Search by code or name"
+  aria-label="Search currencies" autocomplete="off">
+
+  <p id="count" class="muted"></p>
+  <ul id="currency-list" class="currency-list"></ul>
+  <p id="currency-error" hidden></p>
+</main>
+<style>
+  .currency-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: .5rem;
+    list-style: none;
+  }
+</style>
+<script src="js/currencies.js"></script>
+</body>
+</html>
