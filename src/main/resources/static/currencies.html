@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Currency Converter</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<header class="site-header">
+    <a class="brand" href="/">
+        <span class="brand-name">Exchange</span>
+    </a>
+
+    <nav class="tabs">
+        <ul>
+            <li><a href="currencies.html">Currencies</a></li>
+            <li><a href="#rates">Rates</a></li>
+        </ul>
+    </nav>
+
+    <div class="actions">
+        <button class="contact-btn" type="button">Contact</button>
+    </div>
+</header>
+<body>
+<main class="currencies-page">
+  <h1>Available currencies</h1>
+  <p class="muted">
+    Currencies you can convert, from the Frankfurter exchange rate data.
+  </p>
+
+  <input type="search" id="filter" placeholder="Search by code or name"
+  aria-label="Search currencies" autocomplete="off">
+
+  <p id="count" class="muted"></p>
+  <ul id="currency-list" class="currency-list"></ul>
+  <p id="currency-error" hidden></p>
+</main>
+<script src="js/currencies.js"></script>
+</body>
+</html>

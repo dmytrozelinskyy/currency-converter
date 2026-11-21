@@ -13,12 +13,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .authorizeHttpRequests(
-                        auth -> auth
-                                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**").permitAll()
-                                .requestMatchers("/api/**").permitAll()
-                                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/index.html",
+                                "/history.html", "/currencies.html",
+                                "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**",
+                                "/v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated()
                 ).httpBasic(basic -> {});
         return http.build();
     }
