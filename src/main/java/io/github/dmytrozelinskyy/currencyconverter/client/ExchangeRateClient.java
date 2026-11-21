@@ -3,13 +3,14 @@ package io.github.dmytrozelinskyy.currencyconverter.client;
 import io.github.dmytrozelinskyy.currencyconverter.dto.FrankfurterResponse;
 import io.github.dmytrozelinskyy.currencyconverter.exception.ExchangeRateUnavailableException;
 import io.github.dmytrozelinskyy.currencyconverter.exception.CurrencyNotSupportedException;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Component
 public class ExchangeRateClient {
@@ -41,6 +42,24 @@ public class ExchangeRateClient {
                     .body(FrankfurterResponse.class);
         } catch (ResourceAccessException e) {
             throw new ExchangeRateUnavailableException("Could not reach the exchange rate provider", e);
+        }
+    }
+
+    public Map<String, String> getCurrencies() {
+        try {
+            Map<String, String> body = restClient.get().uri("/currencies")
+                    .retrieve()
+                    .onStatus(status -> status.isError(),
+                            (request, response) -> {
+                                throw new ExchangeRateUnavailableException("Provider returned HTTP " + response.getStatusCode().value());
+                            })
+                    .body(new ParameterizedTypeReference<>() { });
+            if (body == null || body.isEmpty()) {
+                throw new ExchangeRateUnavailableException("Provider returned no currencies.");
+            }
+            return body;
+        } catch (ResourceAccessException ex) {
+            throw new ExchangeRateUnavailableException("Could not reach the exchange rate provider ", ex);
         }
     }
 }

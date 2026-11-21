@@ -237,3 +237,17 @@ body {
         align-items: stretch;
     }
 }
+
+/* -- Currency List Page Style -- */
+.currency-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+}
+.currencies-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 7rem 1.5rem 3rem;
+}
