@@ -52,5 +52,6 @@ replay_pid*
 local.properties
 .env
 .env.*
+!.env.example
 
 HELP.md
