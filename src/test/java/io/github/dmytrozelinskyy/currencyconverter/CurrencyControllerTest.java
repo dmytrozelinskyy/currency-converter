@@ -6,6 +6,8 @@ import io.github.dmytrozelinskyy.currencyconverter.exception.CurrencyNotSupporte
 import io.github.dmytrozelinskyy.currencyconverter.exception.ExchangeRateUnavailableException;
 import io.github.dmytrozelinskyy.currencyconverter.service.CurrencyConversionService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -133,5 +135,30 @@ public class CurrencyControllerTest {
                       .param("from", "USD").param("to", "EUR").param("amount", "100"))
               .andExpect(status().isInternalServerError())
               .andExpect(jsonPath("$.detail").value("Something went wrong on our side."));
+   }
+
+   @ParameterizedTest
+   @ValueSource(strings = {"USDX", "U", "12A", ""})
+   void convert_badFromCode_returns400(String code) throws Exception {
+      mockMvc.perform(get("/api/convert")
+              .param("from", code)
+              .param("to", "EUR")
+              .param("amount", "100"))
+              .andExpect(status().isBadRequest());
+   }
+
+   @Test
+   void convert_amountWithComma_returns400() throws Exception {
+      mockMvc.perform(get("/api/convert")
+                      .param("from", "USD")
+                      .param("to", "EUR")
+                      .param("amount", "1,5"))
+              .andExpect(status().isBadRequest());
+   }
+
+   @Test
+   void convert_noParameters_returns400() throws Exception {
+      mockMvc.perform(get("/api/convert"))
+              .andExpect(status().isBadRequest());
    }
 }
