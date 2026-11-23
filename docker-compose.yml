@@ -9,6 +9,24 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U currency -d currency"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/currency
+      DB_USER: currency
+      DB_PASSWORD: ${DB_PASSWORD:-dev-password}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin-password}
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:
