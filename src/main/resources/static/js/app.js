@@ -20,24 +20,7 @@ form.addEventListener('submit', async (e) => {
 
         const converted = await response.json();
         result.textContent = `${amount} ${from} = ${converted} ${to}`;
-        loadHistory();
     } catch (err) {
         result.textContent = `Error: ${err.message}`;
     }
 });
-
-async function loadHistory() {
-    try {
-        const res = await fetch('/api/history?size=5');
-        if (!res.ok) return;
-        const page = await res.json();
-        historyList.replaceChildren(
-            ...page.content.map(h => {
-                const li = document.createElement('li');
-                li.textContent = `${h.amount} ${h.from} = ${h.result} ${h.to}`;
-                return li;
-            }));
-    } catch (e) { }
-}
-
-loadHistory();
