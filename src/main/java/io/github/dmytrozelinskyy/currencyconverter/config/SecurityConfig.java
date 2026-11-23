@@ -12,15 +12,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/cc-console/**"))
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .authorizeHttpRequests(
-                        auth -> auth
-                                .requestMatchers("/cc-console/**").permitAll()
-                                .requestMatchers("/", "/index.html", "/currencies.html", "/css/**", "/js/**", "/images/**").permitAll()
-                                .requestMatchers("/api/**").permitAll()
-                                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/index.html",
+                                "/history.html", "/currencies.html",
+                                "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**",
+                                "/v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated()
                 ).httpBasic(basic -> {});
         return http.build();
     }

@@ -4,6 +4,7 @@ import io.github.dmytrozelinskyy.currencyconverter.client.ExchangeRateClient;
 import io.github.dmytrozelinskyy.currencyconverter.dto.FrankfurterResponse;
 import io.github.dmytrozelinskyy.currencyconverter.exception.CurrencyNotSupportedException;
 import io.github.dmytrozelinskyy.currencyconverter.exception.ExchangeRateUnavailableException;
+import io.github.dmytrozelinskyy.currencyconverter.service.ConversionHistoryService;
 import io.github.dmytrozelinskyy.currencyconverter.service.CurrencyConversionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,9 @@ public class CurrencyConversionServiceTest {
    @Mock
    private ExchangeRateClient exchangeRateClient;
 
+   @Mock
+   private ConversionHistoryService historyService;
+
    @InjectMocks
    private CurrencyConversionService currencyConversionService;
 
@@ -36,6 +40,7 @@ public class CurrencyConversionServiceTest {
       BigDecimal result = currencyConversionService.convert("USD", "EUR", amount);
 
       assertThat(result).isEqualByComparingTo("92.35");
+      verify(historyService).record("USD", "EUR", amount, result);
    }
 
    @Test
@@ -58,6 +63,7 @@ public class CurrencyConversionServiceTest {
 
       assertThat(result).isEqualByComparingTo("20.50");
       verifyNoInteractions(exchangeRateClient);
+      verifyNoInteractions(historyService);
    }
 
    @Test
@@ -68,6 +74,7 @@ public class CurrencyConversionServiceTest {
       assertThatThrownBy(() -> currencyConversionService.convert("USD", "XYZ", amount))
               .isInstanceOf(CurrencyNotSupportedException.class)
               .hasMessageContaining("XYZ");
+      verifyNoInteractions(historyService);
    }
 
    @Test
@@ -87,6 +94,7 @@ public class CurrencyConversionServiceTest {
 
       assertThatThrownBy(() -> currencyConversionService.convert("USD", "EUR", amount))
               .isInstanceOf(ExchangeRateUnavailableException.class);
+      verifyNoInteractions(historyService);
    }
 
    private static FrankfurterResponse response(String base, String target, String value) {
